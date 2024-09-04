@@ -1,0 +1,6 @@
+cyvcf2
+psycopg2
+pymongo
+Flask
+gunicorn
+flask-cors
