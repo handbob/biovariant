@@ -72,7 +72,7 @@ This script retrieves specific variants from PostgreSQL and stores detailed info
   - `retrieve_variants()`: Queries variants from PostgreSQL.
   - `store_in_mongodb()`: Saves the retrieved variants in MongoDB.
 
-### `app.py`
+### `server.py`
 
 A Flask or FastAPI backend API that serves the Vue.js front-end and provides access to PostgreSQL and MongoDB data.
 
