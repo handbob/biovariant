@@ -2,27 +2,22 @@ from cyvcf2 import VCF
 import psycopg2
 from pymongo import MongoClient
 
-
 def load_vcf(file_path, frequency_threshold=0.01):
-    """Loads and filters variants from a VCF file using cyvcf2."""
     vcf_reader = VCF(file_path)
     filtered_variants = []
 
     for record in vcf_reader:
-        af = record.INFO.get('AF', 0)  # Extract allele frequency
+        af = record.INFO.get('AF', 0)
 
-        # Handle case where AF is a tuple (multiple alternate alleles)
         if isinstance(af, tuple):
-            af = af[0]  # Use the first allele's frequency (or adjust as needed)
+            af = af[0]
 
         if af >= frequency_threshold:
             filtered_variants.append(record)
 
     return filtered_variants
 
-
 def store_in_postgresql(variants):
-    """Stores filtered variants in PostgreSQL."""
     conn = psycopg2.connect(database="biovariant", user="postgres", password="postgres", host="localhost", port="5432")
     cursor = conn.cursor()
 
@@ -38,9 +33,7 @@ def store_in_postgresql(variants):
     cursor.close()
     conn.close()
 
-
 def store_in_mongodb(variants):
-    """Stores filtered variants in MongoDB."""
     client = MongoClient('localhost', 27017)
     db = client['biovariant']
     collection = db['variants']
@@ -51,16 +44,11 @@ def store_in_mongodb(variants):
             'position': variant.POS,
             'ref_allele': variant.REF,
             'alt_allele': variant.ALT[0],
-            'info': dict(variant.INFO)  # Store other info as needed
+            'info': dict(variant.INFO)
         })
-
 
 if __name__ == "__main__":
     vcf_file = 'backend/data/genotypes.vcf.gz'
     variants = load_vcf(vcf_file)
-
-    # Store data in PostgreSQL
     store_in_postgresql(variants)
-
-    # Optionally store data in MongoDB
     store_in_mongodb(variants)
