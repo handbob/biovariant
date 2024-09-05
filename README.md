@@ -49,7 +49,7 @@ pybiovariant is a bioinformatics tool designed for the analysis and management o
 
 5. Set up PostgreSQL and MongoDB databases. Create the necessary tables in PostgreSQL by running:
     ```
-    psql -U youruser -d yourdb -f backend/database/create_postgresql_tables.sql
+    psql -U postgres -d biovariant -f backend/database/create_postgresql_tables.sql
     ```
 
 ## Description
