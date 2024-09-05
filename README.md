@@ -47,10 +47,25 @@ pybiovariant is a bioinformatics tool designed for the analysis and management o
     pip install -r backend/requirements.txt
     ```
 
-5. Set up PostgreSQL and MongoDB databases. Create the necessary tables in PostgreSQL by running:
-    ```
-    psql -U postgres -d biovariant -f backend/database/create_postgresql_tables.sql
-    ```
+5. Set up PostgreSQL and MongoDB databases:
+   
+   ### PostgreSQL:
+   - Create the necessary tables in PostgreSQL by running:
+     ```
+     psql -U postgres -d biovariant -f backend/database/create_postgresql_tables.sql
+     ```
+
+   ### MongoDB:
+   - Ensure MongoDB is running on `localhost` and port `27017`. Create the `biovariant` database and the `variants` collection by connecting to the MongoDB shell:
+     ```
+     mongo
+     ```
+
+   - In the MongoDB shell, run the following commands:
+     ```
+     use biovariant
+     db.createCollection("variants")
+     ```
 
 ## Description
 
