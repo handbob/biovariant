@@ -88,11 +88,22 @@ A Flask or FastAPI backend API that serves the Vue.js front-end and provides acc
   - `get_variants()`: Retrieves variants from PostgreSQL.
   - `get_variant_details()`: Fetches detailed information from MongoDB.
 
+- **Run Backend server**
+  ```
+  python backend/api/server.py
+  ```
+
 #### Frontend
 
 - **Components**:
   - `VariantList.vue`: Displays a list of variants and allows searching by chromosome, position, or frequency.
   - `VariantDetail.vue`: Shows detailed information about a specific variant, pulled from MongoDB.
+
+- **Run Frontend server**
+  ```
+  cd frontend
+  npm run dev
+  ```
 
 ## Features
 
