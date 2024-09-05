@@ -71,20 +71,13 @@ pybiovariant is a bioinformatics tool designed for the analysis and management o
 
 #### Backtend
 
-### `load_to_postgresql.py`
+### `load_to_databases.py`
 
 This script loads a VCF file, filters variants based on allele frequency, and stores the unique chromosomal positions in a PostgreSQL database.
 
 - **Functions**:
   - `load_vcf()`: Reads the VCF file and filters variants.
   - `store_in_postgresql()`: Saves the filtered variants to PostgreSQL.
-
-### `load_to_mongodb.py`
-
-This script retrieves specific variants from PostgreSQL and stores detailed information about them in MongoDB.
-
-- **Functions**:
-  - `retrieve_variants()`: Queries variants from PostgreSQL.
   - `store_in_mongodb()`: Saves the retrieved variants in MongoDB.
 
 ### `server.py`

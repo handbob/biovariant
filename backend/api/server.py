@@ -27,21 +27,5 @@ def get_variant_by_position(position):
         return jsonify(variant), 200
     return jsonify({"error": "Variant not found"}), 404
 
-# Route to search for variants by query parameters (optional, for future use)
-@app.route('/variants/search', methods=['GET'])
-def search_variants():
-    chromosome = request.args.get('chromosome')
-    position = request.args.get('position')
-
-    # Query based on available parameters
-    query = {}
-    if chromosome:
-        query['chromosome'] = chromosome
-    if position:
-        query['position'] = int(position)
-
-    variants = list(collection.find(query, {'_id': 0}))  # Exclude _id field
-    return jsonify(variants), 200
-
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
