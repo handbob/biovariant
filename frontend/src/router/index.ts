@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import VariantList from '../components/VariantList.vue'
 import VariantDetail from '../components/VariantDetail.vue'
 
