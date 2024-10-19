@@ -46,7 +46,22 @@ Pybiovariant is a bioinformatics tool designed for the analysis and management o
     cd backend && pip install -r requirements.txt
     ```
 
-5. Set up the PostgreSQL database:
+5. Configure the PostgreSQL database connection:
+   - Create a `.env` file in the `backend` directory:
+     ```bash
+     touch .env
+     ```
+   - Add the following environment variables to the `.env` file:
+     ```env
+     DATABASE_NAME=
+     DATABASE_USER=
+     DATABASE_PASSWORD=
+     DATABASE_HOST=
+     DATABASE_PORT=
+     ```
+   - Fill in the values for your PostgreSQL setup.
+
+6. Set up the PostgreSQL database:
     ```bash
     psql -U postgres -d biovariant -f backend/database/create_postgresql_tables.sql
     ```
