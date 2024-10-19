@@ -53,11 +53,11 @@ Pybiovariant is a bioinformatics tool designed for the analysis and management o
      ```
    - Add the following environment variables to the `.env` file:
      ```env
-     DATABASE_NAME=
-     DATABASE_USER=
-     DATABASE_PASSWORD=
-     DATABASE_HOST=
-     DATABASE_PORT=
+     DATABASE_NAME=biovariant
+     DATABASE_USER=db_user
+     DATABASE_PASSWORD=securepassword
+     DATABASE_HOST=localhost
+     DATABASE_PORT=5432
      ```
    - Fill in the values for your PostgreSQL setup.
 
