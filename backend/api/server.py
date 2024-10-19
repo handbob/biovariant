@@ -1,31 +1,81 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
+import psycopg2
 from flask_cors import CORS
-from pymongo import MongoClient
+from dotenv import load_dotenv
 
-# Initialize Flask app
+load_dotenv()
+
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allow CORS from any origin
+CORS(app)
 
-# MongoDB connection
-client = MongoClient('localhost', 27017)
-db = client['biovariant']  # Ensure this is the correct database name
-collection = db['variants']
+# Database connection parameters
+import os
+db_params = {
+    'database': os.getenv('DATABASE_NAME'),
+    'user': os.getenv('DATABASE_USER'),
+    'password': os.getenv('DATABASE_PASSWORD'),
+    'host': os.getenv('DATABASE_HOST'),
+    'port': os.getenv('DATABASE_PORT')
+}
 
-# Route to fetch the entire list of variants
 @app.route('/variants', methods=['GET'])
 def get_variants():
-    # Fetch all variants from MongoDB
-    variants = list(collection.find({}, {'_id': 0}))  # Exclude the _id field in the response
-    return jsonify(variants), 200
+    '''Fetch variants from PostgreSQL and return as JSON.'''
+    try:
+        conn = psycopg2.connect(**db_params)
+        cursor = conn.cursor()
+        cursor.execute('SELECT chromosome, position, ref_allele, alt_allele FROM variants LIMIT 1000;')
+        rows = cursor.fetchall()
 
-# Route to fetch a variant by position
-@app.route('/variant/<int:position>', methods=['GET'])
-def get_variant_by_position(position):
-    # Search for a variant by its position in MongoDB
-    variant = collection.find_one({"position": position}, {'_id': 0})  # Exclude the _id field
-    if variant:
-        return jsonify(variant), 200
-    return jsonify({"error": "Variant not found"}), 404
+        # Convert to list of dictionaries
+        variants = [
+            {
+                'chromosome': row[0],
+                'position': row[1],
+                'ref_allele': row[2],
+                'alt_allele': row[3]
+            }
+            for row in rows
+        ]
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+        cursor.close()
+        conn.close()
+
+        return jsonify(variants)
+    except Exception as e:
+        print(f"Error fetching variants: {e}")
+        return jsonify({'error': 'Failed to fetch variants'}), 500
+
+# **Add this new route**
+@app.route('/variant/<position>', methods=['GET'])
+def get_variant(position):
+    '''Fetch a single variant by position from PostgreSQL and return as JSON.'''
+    try:
+        conn = psycopg2.connect(**db_params)
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT chromosome, position, ref_allele, alt_allele
+            FROM variants
+            WHERE position = %s;
+        ''', (position,))
+        row = cursor.fetchone()
+
+        if row:
+            variant = {
+                'chromosome': row[0],
+                'position': row[1],
+                'ref_allele': row[2],
+                'alt_allele': row[3]
+            }
+            return jsonify(variant)
+        else:
+            return jsonify({'error': 'Variant not found'}), 404
+    except Exception as e:
+        print(f"Error fetching variant: {e}")
+        return jsonify({'error': 'Failed to fetch variant'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+if __name__ == '__main__':
+    app.run(port=5001, debug=True)
