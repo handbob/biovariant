@@ -1,6 +1,6 @@
 # pybiovariant
 
-pybiovariant is a bioinformatics tool designed for the analysis and management of genetic variants from VCF files using Python. It supports filtering genetic variants, storing them in PostgreSQL, querying specific variants, and visualizing allele frequency data via a web interface built with Vue.js.
+Pybiovariant is a bioinformatics tool designed for the analysis and management of genetic variants from VCF files using Python. It supports filtering genetic variants, storing them in PostgreSQL, querying specific variants, and visualizing allele frequency data via a web interface built with React.
 
 ## Table of Contents
 
@@ -15,113 +15,86 @@ pybiovariant is a bioinformatics tool designed for the analysis and management o
 
 - [Python](https://www.python.org/)
 - [PostgreSQL](https://www.postgresql.org/)
-- [MongoDB](https://www.mongodb.com/)
-- [Vue.js](https://vuejs.org/)
+- [React](https://reactjs.org/)
 
 ## Installation
 
 1. Clone the repository:
-    ```
+    ```bash
     git clone https://github.com/handbob/pybiovariant.git
     cd pybiovariant
     ```
 
 2. Set up a virtual environment:
-    ```
+    ```bash
     python -m venv venv
     ```
 
 3. Activate the virtual environment:
 
     - On Windows:
-      ```
+      ```bash
       venv\Scripts\activate
       ```
     - On macOS and Linux:
-      ```
+      ```bash
       source venv/bin/activate
       ```
 
 4. Install the required Python packages:
+    ```bash
+    cd backend && pip install -r requirements.txt
     ```
-    pip install -r backend/requirements.txt
+
+5. Set up the PostgreSQL database:
+    ```bash
+    psql -U postgres -d biovariant -f backend/database/create_postgresql_tables.sql
     ```
-
-5. Set up PostgreSQL and MongoDB databases:
-   
-   ### PostgreSQL:
-   - Create the necessary tables in PostgreSQL by running:
-     ```
-     psql -U postgres -d biovariant -f backend/database/create_postgresql_tables.sql
-     ```
-
-   ### MongoDB:
-   - Ensure MongoDB is running on `localhost` and port `27017`. Create the `biovariant` database and the `variants` collection by connecting to the MongoDB shell:
-     ```
-     mongo
-     ```
-
-   - In the MongoDB shell, run the following commands:
-     ```
-     use biovariant
-     db.createCollection("variants")
-     ```
 
 ## Description
 
-#### Backtend
+This tool includes backend and frontend components.
 
-### `load_to_databases.py`
+The backend consists of Python scripts and a web server:
 
-This script loads a VCF file, filters variants based on allele frequency, and stores the unique chromosomal positions in a PostgreSQL database.
-
-- **Functions**:
+- **`load_to_databases.py`**: This script loads a VCF file, filters variants based on allele frequency, and stores the unique chromosomal positions in a PostgreSQL database. Functions:
   - `load_vcf()`: Reads the VCF file and filters variants.
   - `store_in_postgresql()`: Saves the filtered variants to PostgreSQL.
-  - `store_in_mongodb()`: Saves the retrieved variants in MongoDB.
 
-### `server.py`
-
-A Flask or FastAPI backend API that serves the Vue.js front-end and provides access to PostgreSQL and MongoDB data.
-
-- **Functions**:
+- **`server.py`**: A Flask or FastAPI backend API that serves the React front-end and provides access to PostgreSQL data. Functions:
   - `get_variants()`: Retrieves variants from PostgreSQL.
-  - `get_variant_details()`: Fetches detailed information from MongoDB.
+  - `get_variant_details()`: Fetches detailed information about a specific variant.
 
-- **Run Backend server**
-  ```
-  python backend/api/server.py
-  ```
+To run the backend server:
+```bash
+cd backend && python api/server.py
+```
 
-#### Frontend
+The frontend, built with React, includes the following components:
 
-- **Components**:
-  - `VariantList.vue`: Displays a list of variants and allows searching by chromosome, position, or frequency.
-  - `VariantDetail.vue`: Shows detailed information about a specific variant, pulled from MongoDB.
+- **`VariantList.js`**: Displays a list of variants and allows searching by chromosome, position, or frequency.
+- **`VariantDetail.js`**: Shows detailed information about a specific variant.
 
-- **Run Frontend server**
-  ```
-  cd frontend
-  npm run dev
-  ```
+To run the frontend server:
+```bash
+cd frontend && npm run dev
+```
 
 ## Features
 
 - Filters genetic variants based on allele frequency from VCF files.
 - Stores filtered variants in PostgreSQL for easy querying.
-- Retrieves and stores variant details in MongoDB.
-- Provides a Vue.js front-end for searching and viewing genetic variants.
+- Provides a React front-end for searching and viewing genetic variants.
 - Displays graphical summary of allele frequency data.
 
 ## TODO
 
-- [ ] Add more detailed unit tests for MongoDB operations.
+- [ ] Add more detailed unit tests for PostgreSQL operations.
 - [ ] Implement frontend pagination for large datasets.
-- [ ] Provide real-time data update in the Vue.js app using WebSockets.
+- [ ] Provide real-time data update in the React app using WebSockets.
 - [ ] Add more detailed graphical visualizations of genetic data.
 
 ## DONE
 
 - [x] Implement basic VCF filtering and storage in PostgreSQL.
-- [x] Set up MongoDB integration for storing variant details.
-- [x] Build Vue.js front-end for variant search and display.
+- [x] Build React front-end for variant search and display.
