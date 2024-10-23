@@ -1,4 +1,4 @@
-# pybiovariant
+# biovariant
 
 Pybiovariant is a bioinformatics tool designed for the analysis and management of genetic variants from VCF files using Python. It supports filtering genetic variants, storing them in PostgreSQL, querying specific variants, and visualizing allele frequency data via a web interface built with React.
 
