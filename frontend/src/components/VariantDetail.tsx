@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { useParams, Link } from 'react-router-dom'
-import '../styles/VariantDetails.css'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams, Link } from 'react-router-dom';
+import '../styles/VariantDetails.css';
 
-const VariantDetails = () => {
-  const [variant, setVariant] = useState(null);
-  const [error, setError] = useState(null);
-  const { position } = useParams();
+// Define the structure of the Variant type
+interface Variant {
+  chromosome: string;
+  position: number;
+  ref_allele: string;
+  alt_allele: string;
+  info?: Record<string, any>; // This can be updated based on the exact structure of the info field
+}
+
+const VariantDetails: React.FC = () => {
+  const [variant, setVariant] = useState<Variant | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { position } = useParams<{ position: string }>();
 
   useEffect(() => {
     const fetchVariant = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/variant/${position}`);
+        const response = await axios.get<Variant>(`http://localhost:5001/variant/${position}`);
         setVariant(response.data);
       } catch (error) {
         setError('Could not load the variant');
