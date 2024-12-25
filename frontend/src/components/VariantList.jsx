@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import '../styles/VariantList.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import "../styles/VariantList.css";
 
 const VariantList = () => {
   const [variants, setVariants] = useState([]);
@@ -11,10 +11,10 @@ const VariantList = () => {
   useEffect(() => {
     const fetchVariants = async () => {
       try {
-        const response = await axios.get('/variants');
+        const response = await axios.get("/variants");
         setVariants(response.data);
       } catch (error) {
-        console.error('Error fetching variants:', error);
+        console.error("Error fetching variants:", error);
       }
     };
     fetchVariants();
